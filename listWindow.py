@@ -1,18 +1,37 @@
 # importing tkinter module
 from tkinter import *
-from PIL import ImageTk,Image #image stuff - install package: Pillow
+import pickle
 
 
-class listWindowClass:
+class ListWindowClass:
+
     def __init__(self, master):
-        self.master = master #reference til main window objektet
+
+        # load filen:
+        self.filename = 'betalinger.pk'
+        self.fodboldtur = {}
+        try:  # FILEN FINDES :)
+            infile = open(self.filename, 'rb')
+            self.fodboldtur = pickle.load(infile)
+            infile.close()
+        except:  # FILEN FINDES IKKE.
+            messagebox.showerror(parent=self.root, title="GWAAAAAAA", message="FILEN ER IKKE FUNDET!!")
+
+        self.master = master  # reference til main window objektet
         self.listWindow = Toplevel(self.master.root)
         self.listWindow.title("List Window")
         self.listWindow.geometry("500x500")
 
-        Label(self.listWindow, text="Liste over indbetalinger.. eller.. noget der ligner en cylinder").pack()
+        Label(self.listWindow, text="Liste over indbetalinger", font="bold").grid(row=0, column=0, columnspan=3)
 
-        img = ImageTk.PhotoImage(Image.open("assets/img/cyl.png"))
-        panel = Label(self.listWindow, image=img)
-        panel.image = img
-        panel.pack(side="bottom", fill="both", expand="yes")
+        self.list = Text(self.listWindow, height=10, width=50, padx=5)
+        self.list.grid(row=1, column=0, columnspan=3)
+
+        self.update()
+
+    def update(self):
+        total = 0
+        for item in self.fodboldtur.items():
+            self.list.insert(END, f"{item[0]} har betalt {item[1]} kr\n")
+            total += item[1]
+        self.list.insert(END, f"\n Totalt: {total} kr")

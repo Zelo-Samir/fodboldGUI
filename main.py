@@ -1,37 +1,36 @@
 # importing tkinter module
 import pickle
 from tkinter import *
-from tkinter.ttk import * #progressbar
+from tkinter.ttk import *  # progressbar
 from tkinter import messagebox
 
 
-from listWindow import listWindowClass
+from listWindow import ListWindowClass
 from payWindow import payWindowClass
-from worstWindow import worstWindowClass
+from worstWindow import NewWindowClass
 
-class mainWindow:
+
+class mainwindow:
     def __init__(self):
 
-
         self.total = 0
-        self.target = 1
-
+        self.target = 0
         # creating tkinter window
         self.root = Tk()
 
-        #load filen:
+        # load filen:
         self.filename = 'betalinger.pk'
         self.fodboldtur = {}
-        try: #FILEN FINDES :)
+        try:  # FILEN FINDES :)
             infile = open(self.filename, 'rb')
             self.fodboldtur = pickle.load(infile)
             infile.close()
-        except: #FILEN FINDES IKKE.
-            ##TODO: open file??
-            ##TODONE: warn a brother
+        except:  # FILEN FINDES IKKE.
             messagebox.showerror(parent=self.root, title="GWAAAAAAA", message="FILEN ER IKKE FUNDET!!")
         print(self.fodboldtur)
         self.total = sum(self.fodboldtur.values())
+        self.target = 4500*len(self.fodboldtur)
+
         print(f"TOTAL: {self.total}")
 
 
@@ -48,19 +47,16 @@ class mainWindow:
         self.progress = Progressbar(self.root, orient = HORIZONTAL,
                     length = 250, mode = 'determinate')
         self.progress['value'] = self.total/self.target*100
-        #print(self.progress['length'])
-        #print(self.progress['value'])
-        #BUTTONS
         self.progress.pack(padx= 20)
 
-        listButton = Button(self.root,text ="Liste over indbetalinger",command = lambda: listWindowClass(self))
+        listButton = Button(self.root,text ="Liste over indbetalinger",command = lambda: ListWindowClass(self))
         listButton.pack(padx = 20, pady = 10,side=LEFT)
 
 
         payButton = Button(self.root,text ="Indbetal",command = lambda: payWindowClass(self))
         payButton.pack(padx = 20, pady = 10,side=LEFT)
 
-        bottom3Button = Button(self.root,text ="Bund 3",command = lambda: worstWindowClass(self))
+        bottom3Button = Button(self.root,text ="Ny medlem",command = lambda: NewWindowClass(self))
         bottom3Button.pack(padx = 20, pady = 10,side=LEFT)
 
         # infinite loop
@@ -72,4 +68,4 @@ class mainWindow:
         print("GEMT")
 
 if __name__ == '__main__':
-    main = mainWindow()
+    main = mainwindow()
