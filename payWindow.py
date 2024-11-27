@@ -1,6 +1,7 @@
 # importing tkinter module
 from tkinter import *
 from tkinter import messagebox
+from PIL import ImageTk,Image
 import pickle
 
 class payWindowClass:
@@ -40,12 +41,10 @@ class payWindowClass:
         self.optionMenu.pack()
         self.button.pack()
 
-        # Load the image (ensure the image is in the same directory or provide a full path)
-        image = self.PhotoImage(file="kyriakos.jpg")
-
-        # Create a Label to display the image
-        label = self.Label(root, image=image)
-        label.pack(pady=20)
+        img = ImageTk.PhotoImage(Image.open("assets/img/kyriakos.jpg"))
+        panel = Label(self.payWindow, image=img)
+        panel.image = img
+        panel.pack(side="bottom", fill="both")
 
     def gemFilen(self):
         outfile = open(self.filename, 'wb')
