@@ -1,4 +1,4 @@
-# importing tkinter module
+# importing tkinter module0
 import pickle
 from tkinter import *
 from tkinter.ttk import *  # progressbar
@@ -61,11 +61,13 @@ class mainwindow:
 
         # infinite loop
         mainloop()
+
     def gemFilen(self):
         outfile = open(self.filename, 'wb')
         pickle.dump(self.fodboldtur, outfile)
         outfile.close()
         print("GEMT")
+
 
 if __name__ == '__main__':
     main = mainwindow()

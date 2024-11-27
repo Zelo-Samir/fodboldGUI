@@ -25,31 +25,31 @@ class ListWindowClass:
 
         Label(self.listWindow, text="Liste over indbetalinger", font="bold").grid(row=0, column=0, columnspan=3)
 
-        self.list = Text(self.listWindow, height=10, width=50, padx=5)
+        self.list = Text(self.listWindow, height=20, width=50, padx=5)
         self.list.grid(row=1, column=0, columnspan=3)
 
         # Liste over de tre værste medlammer
         listemindst = []
         self.listemindstnavn = []
 
+        #TODO: Fiks denne funktion
         for item in self.fodboldtur.items():
 
             if item[1] >= 4500:
                 pass
             else:
-                if len(listemindst) > 2:
+                if len(listemindst) > 3:
                     for number in listemindst:
                         if item[1] < number:
-                            listemindst.append(item[1])
                             self.listemindstnavn.append(item[0])
-
+                            self.listemindstnavn.remove(number)
                 else:
-                    listemindst.append(item[1])
                     self.listemindstnavn.append(item[0])
 
         self.worstlist = Text(self.listWindow, height=5, width=50, padx=5, pady=20)
         self.worstlist.grid(row=2, column=0, columnspan=3)
 
+        print(self.listemindstnavn)
         self.update()
 
     def update(self):

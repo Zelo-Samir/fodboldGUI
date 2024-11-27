@@ -34,23 +34,47 @@ class payWindowClass:
         for key, value in self.fodboldtur.items():
             OPTIONS.append(key)
 
-        variable = StringVar()
-        variable.set(OPTIONS[0])
-        self.optionMenu = OptionMenu(self.payWindow, variable, *OPTIONS)
+        self.variable = StringVar()
+        self.variable.set(OPTIONS[0])
+        self.optionMenu = OptionMenu(self.payWindow, self.variable, *OPTIONS)
         self.optionMenu.pack()
         self.button.pack()
 
+        # Load the image (ensure the image is in the same directory or provide a full path)
+        image = self.PhotoImage(file="kyriakos.jpg")
+
+        # Create a Label to display the image
+        label = self.Label(root, image=image)
+        label.pack(pady=20)
+
+    def gemFilen(self):
+        outfile = open(self.filename, 'wb')
+        pickle.dump(self.fodboldtur, outfile)
+        outfile.close()
+        print("GEMT")
+
     def addMoney(self):
         try:
-            amount = abs(int(self.money.get())) #HUSK AT VALIDERE INPUT!, kun positive heltal!
+            amount = int(self.money.get()) #HUSK AT VALIDERE INPUT!, kun positive heltal!
         except:
             messagebox.showerror(parent=self.payWindow , title="Beløb fejl!", message="Prøv igen.\nKun hele tal!")
             return
 
-        self.fodboldtur[self.optionMenu.]
+        #self.fodboldtur[str(self.variable)] += self.money.get()
+
+        # Get the selected key from the OptionMenu
+        selected_key = self.variable.get()
+
+        # Update the dictionary
+        if selected_key in self.fodboldtur:
+            self.fodboldtur[selected_key] += amount
+        else:
+            messagebox.showerror(parent=self.payWindow, title="Fejl!", message="Valgt nøgle findes ikke!")
+            return
+
         self.master.total += amount
         self.master.progressLabelText.set(f"Indsamlet: {self.master.total} af {self.master.target} kroner:")
         print(f"Indsamlet: {self.master.total} af {self.master.target} kroner!")
         self.master.progress['value'] = self.master.total / self.master.target * 100
         ##TODO: TELL MAIN WINDOW TO PICKLE THE DICTIONARY
-        self.master.gemFilen()
+        self.gemFilen()
